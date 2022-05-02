@@ -50,3 +50,16 @@ class Key:
 
     def get_key(self):
         return self.key
+
+    def click(self):
+        self.rect = pygame.draw.rect(self.screen, (255,165,0), (self.left,self.top,self.width,self.height))
+        self.rect = pygame.draw.rect(self.screen, (127,127,127), (self.left,self.top,self.width,self.height), 2)
+        self.add_key()
+        pygame.display.update()
+
+    def unclick(self):
+        self.rect = pygame.draw.rect(self.screen, (0,0,0), (self.left,self.top,self.width,self.height))
+        pygame.display.update()
+        self.rect = pygame.draw.rect(self.screen, (127,127,127), (self.left,self.top,self.width,self.height), 2)
+        self.add_key()
+        pygame.display.update()

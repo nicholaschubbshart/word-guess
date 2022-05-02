@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 
 import sys
+import time
 
 import classes as cla
 
@@ -12,6 +13,9 @@ def get_pressed(key_board, cords):
             left, top = col[1]
             
             if ((left <= cords[0] and cords[0] <= (left + 30)) and (top <= cords[1] and cords[1] <= (top + 30))):
+                col[0].click()
+                time.sleep(0.1)
+                col[0].unclick()
                 return col[0].get_key()
 
 
