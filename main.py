@@ -22,6 +22,7 @@ def get_pressed(key_board, cords):
 def add_guess(main_play, pressed):
 
     is_over = main_play.add_guess(pressed)
+    print(is_over)
     return is_over
 
 
@@ -94,9 +95,7 @@ def main():
                 pos = pygame.mouse.get_pos()
                 pressed = get_pressed(key_board, pos)
 
-                if (add_guess(main_play, pressed) == "won"):
-                    pygame.quit()
-                    sys.exit()
+                add_guess(main_play, pressed)
 
         pygame.display.update()
 

@@ -28,6 +28,18 @@ class Guess:
 
     def get_letter(self):
         return self.letter
+    
+    def green(self):
+        self.rect = pygame.draw.rect(self.screen, (0,128,0), (self.left,self.top,self.width,self.height))
+        self.rect = pygame.draw.rect(self.screen, (127,127,127), (self.left,self.top,self.width,self.height), 2)
+        self.add_guess(self.letter)
+        pygame.display.update()
+
+    def red(self):
+        self.rect = pygame.draw.rect(self.screen, (255,0,0), (self.left,self.top,self.width,self.height))
+        self.rect = pygame.draw.rect(self.screen, (127,127,127), (self.left,self.top,self.width,self.height), 2)
+        self.add_guess(self.letter)
+        pygame.display.update()
 
 
 class Key:
@@ -64,7 +76,6 @@ class Key:
 
     def unclick(self):
         self.rect = pygame.draw.rect(self.screen, (0,0,0), (self.left,self.top,self.width,self.height))
-        pygame.display.update()
         self.rect = pygame.draw.rect(self.screen, (127,127,127), (self.left,self.top,self.width,self.height), 2)
         self.add_key()
         pygame.display.update()
@@ -102,5 +113,10 @@ class Play:
             guessed += self.guess_space[self.row][i].get_letter()
         
         if(guessed == self.answer):
+            for i in range(0, self.max_col):
+                self.guess_space[self.row][i].green()
             return True
-        return False
+        else:
+            for i in range(0, self.max_col):
+                self.guess_space[self.row][i].red()
+            return False
