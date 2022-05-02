@@ -19,6 +19,12 @@ def get_pressed(key_board, cords):
                 return col[0].get_key()
 
 
+def add_guess(main_play, pressed):
+
+    is_over = main_play.add_guess(pressed)
+    return is_over
+
+
 def main():
     pygame.init()
     pygame.display.set_caption("word-guess")
@@ -74,6 +80,10 @@ def main():
     #     if(i == 6):
     #         break
 
+    to_be_guessed = "HELLO"
+
+    main_play = cla.Play(guess_space, to_be_guessed)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -83,7 +93,10 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed():
                 pos = pygame.mouse.get_pos()
                 pressed = get_pressed(key_board, pos)
-                print(pressed)
+
+                if (add_guess(main_play, pressed) == "won"):
+                    pygame.quit()
+                    sys.exit()
 
         pygame.display.update()
 
