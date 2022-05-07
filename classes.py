@@ -26,6 +26,12 @@ class Guess:
         self.screen.blit(self.font.render(letter, True, (255,255,255)), (self.left + xoff, self.top + yoff+4))
         pygame.display.update()
 
+    def remove_guess(self):
+        if (self.letter != ""):
+            self.rect = pygame.draw.rect(self.screen, (0,0,0), (self.left,self.top,self.width,self.height))
+            self.rect = pygame.draw.rect(self.screen, (127,127,127), (self.left,self.top,self.width,self.height), 2)
+            pygame.display.update()
+
     def get_letter(self):
         return self.letter
     
@@ -44,7 +50,7 @@ class Guess:
 
 class Key:
 
-    def __init__(self, screen, left, top, width, height, key):
+    def __init__(self, screen, left, top, width, height, key, size):
 
         self.screen = screen
         self.left = left
@@ -53,7 +59,7 @@ class Key:
         self.height = height
         self.key = key
         self.rect = pygame.draw.rect(screen, (127,127,127), (left,top,width,height), 2)
-        self.font = pygame.font.SysFont("Roboto", 30)
+        self.font = pygame.font.SysFont("Roboto", size)
     
     def add_key(self):
 
@@ -93,18 +99,22 @@ class Play:
 
     def add_guess(self, guess):
 
-        if (self.col == self.max_col):
+        if (guess == "ENT"):
             if (self.check_row()):
                 return "won"
             else:
                 self.row += 1
                 self.col = 0
-
-        if (self.row == self.max_row):
+        elif (guess == "DEL"):
+            self.col -= 1
+            if (self.col < 0):
+                self.col = 0
+            self.guess_space[self.row][self.col].remove_guess()
+        elif (self.col < self.max_col):
+            self.guess_space[self.row][self.col].add_guess(guess)
+            self.col += 1
+        elif (self.row == self.max_row):
             return "lost"
-
-        self.guess_space[self.row][self.col].add_guess(guess)
-        self.col += 1
 
     def check_row(self):
         guessed = ""

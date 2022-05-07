@@ -11,8 +11,9 @@ def get_pressed(key_board, cords):
     for row in key_board:
         for col in row:
             left, top = col[1]
+            width, height = col[2]
             
-            if ((left <= cords[0] and cords[0] <= (left + 30)) and (top <= cords[1] and cords[1] <= (top + 30))):
+            if ((left <= cords[0] and cords[0] <= (left + width)) and (top <= cords[1] and cords[1] <= (top + height))):
                 col[0].click()
                 time.sleep(0.1)
                 col[0].unclick()
@@ -22,9 +23,40 @@ def get_pressed(key_board, cords):
 def add_guess(main_play, pressed):
 
     is_over = main_play.add_guess(pressed)
-    print(is_over)
     return is_over
 
+def reset_screen(screen):
+    screen.fill((0,0,0))
+    pygame.draw.rect(screen, (127,127,127), (60,180,300,300))
+    pygame.display.update()
+
+def display_won(screen):
+    time.sleep(0.5)
+    reset_screen(screen)
+
+    gate = True
+    while(gate):
+        for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    gate = False
+
+def display_lost(screen):
+    time.sleep(0.5)
+    reset_screen(screen)
+
+    gate = True
+    while(gate):
+        for event in pygame.event.get():
+                gate = False
+
+def check_result(screen, result):
+
+    if (result == "won"):
+        display_won(screen)
+        return True
+    elif (result == "Lost"):
+        display_lost(screen)
+        return True
 
 def main():
     pygame.init()
@@ -57,31 +89,28 @@ def main():
 
         row = []
         for i in range (0, layout[j]):
-            temp = cla.Key(screen, key_left, key_top, 30, 30, keys[j][i])
+            temp = cla.Key(screen, key_left, key_top, 30, 30, keys[j][i], 30)
             temp.add_key()
-            row.append([temp, [key_left, key_top]])
+            row.append([temp, [key_left, key_top], [30, 30]])
             key_left += 30
 
         key_left = 60
         key_top += 30
         key_board.append(row)
-    
 
-    # # TO BE REMOVED
-    # alp = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    # i = 0 # row number
-    # j = 0 # col number
-    # for letter in alp:
-    #     guess_space[i][j].add_guess(letter)
-    #     j += 1
-    #     if (j == 5):
-    #         i += 1
-    #         j = 0
+    # add enter and backspace buttons
+    temp = []
+    en = cla.Key(screen, 60, 540, 45, 30, "ENT", 20)
+    en.add_key()
+    temp.append([en, [60, 540], [45, 30]])
+    for ele in key_board[2]:
+        temp.append(ele)
+    de = cla.Key(screen, 315, 540, 45, 30, "DEL", 20)
+    de.add_key()
+    temp.append([de, [315, 540], [45, 30]])
+    key_board[2] = temp
 
-    #     if(i == 6):
-    #         break
-
-    to_be_guessed = "HELLO"
+    to_be_guessed = "HELLO" ###################################################################
 
     main_play = cla.Play(guess_space, to_be_guessed)
 
@@ -95,7 +124,12 @@ def main():
                 pos = pygame.mouse.get_pos()
                 pressed = get_pressed(key_board, pos)
 
-                add_guess(main_play, pressed)
+                result = add_guess(main_play, pressed)
+                check = check_result(screen, result)
+
+                if (check):
+                    pygame.quit()
+                    sys.exit()
 
         pygame.display.update()
 
