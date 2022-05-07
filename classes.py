@@ -105,6 +105,8 @@ class Play:
             else:
                 self.row += 1
                 self.col = 0
+                if (self.row == self.max_row):
+                    return "lost"
         elif (guess == "DEL"):
             self.col -= 1
             if (self.col < 0):
@@ -113,8 +115,6 @@ class Play:
         elif (self.col < self.max_col):
             self.guess_space[self.row][self.col].add_guess(guess)
             self.col += 1
-        elif (self.row == self.max_row):
-            return "lost"
 
     def check_row(self):
         guessed = ""

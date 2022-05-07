@@ -30,32 +30,47 @@ def reset_screen(screen):
     pygame.draw.rect(screen, (127,127,127), (60,180,300,300))
     pygame.display.update()
 
-def display_won(screen):
+def add_mess(screen, mess):
+    font = pygame.font.SysFont("Roboto", 80)
+
+    if (mess == "win"):
+        w, h = font.size("Congrats!")
+
+        xoff = (300 - w) // 2
+        yoff = (300 - h) // 2
+
+        screen.blit(font.render("Congrats!", True, (255,255,255)), (60 + xoff, 180 + yoff+4))
+        pygame.display.update()
+    else:
+        w, h = font.size("You Suck!")
+
+        xoff = (300 - w) // 2
+        yoff = (300 - h) // 2
+
+        screen.blit(font.render("You Suck!", True, (255,255,255)), (60 + xoff, 180 + yoff+4))
+        pygame.display.update()
+
+def display(screen, mess):
     time.sleep(0.5)
     reset_screen(screen)
+    add_mess(screen, mess)
 
     gate = True
     while(gate):
         for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
                     gate = False
-
-def display_lost(screen):
-    time.sleep(0.5)
-    reset_screen(screen)
-
-    gate = True
-    while(gate):
-        for event in pygame.event.get():
-                gate = False
 
 def check_result(screen, result):
 
     if (result == "won"):
-        display_won(screen)
+        display(screen, "win")
         return True
-    elif (result == "Lost"):
-        display_lost(screen)
+    elif (result == "lost"):
+        display(screen, "lost")
         return True
 
 def main():
